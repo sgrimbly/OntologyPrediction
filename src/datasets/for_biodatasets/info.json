@@ -1,0 +1,17 @@
+{
+    "name": "Gene Ontology Classification",
+    "desc": "Collection of subsets of PDB, and SwissProt based on sequence length (range [40, 1000]) 
+            and whether proteins have matching Gene Ontology (GO) classifications in the Molecular Function 
+            Ontology (MFO) with  evidence  codes ’EXP’, ’IDA’, ’IPI’, ’IMP’, ’IGI’, ’IEP’, ’HTP’, ’HDA’, 
+            ’HMP’, ’HGI’,’HEP’, ’IBA’, ’IBD’, ’IKR’, ’IRD’, ’IC’ and ’TAS.",
+    "updated": "May 9 2021",
+    "count": "91k",
+    "id": 12,
+    "tags": {
+      "tasks": ["classification"],
+      "libraries": ["pytorch"],
+      "embeddings": ["prot_bert"],
+      "datasets": ["antibody"]
+    }
+  }
+  

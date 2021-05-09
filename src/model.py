@@ -128,7 +128,7 @@ def train(
     return avg_valid_loss, avg_valid_avgprec, avg_valid_rocauc, avg_valid_sdmin, avg_valid_fmax
 
 
-def evaluate(device, net, criterion, eval_loader, icvec, nth=10):
+def evaluate(device, net, criterion, eval_loader, icvec, nth=10, evaluation=False):
     # Eval each sample
     net.eval()
     avg_loss = 0.0

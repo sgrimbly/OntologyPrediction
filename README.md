@@ -2,11 +2,11 @@
 # Gene Ontology Prediction for DeepChain
 
 
-# Introduction
+## Introduction
 - I have little to no domain knowledge in protein design or bioinformatics.
 - 
 
-# Installation
+## Installation
 
 Follow the instructions at the DeepChainApps GitHub [repo](https://github.com/DeepChainBio/deep-chain-apps) to install your 
 environment for creating a DeepChain app. 
@@ -25,14 +25,14 @@ pip install torch-spline-conv -f https://pytorch-geometric.com/whl/torch-1.5.0.h
 pip install torch-geometric
 ```
 
-# Protein Function Prediction 
+## Protein Function Prediction 
 The task I am interested in is taking a [protein sequence](https://en.wikipedia.org/wiki/Protein_primary_structure) and mapping
 this to the [protein function](https://en.wikipedia.org/wiki/Protein_function_prediction). This is a notoriously difficult task
 since proteins can code for multiple tasks, and different proteins can code for similar functions. This is a dramatic 
 oversimplification, but the task is well captured by the work of [The Gene Ontology](https://en.wikipedia.org/wiki/Gene_ontology).
 
-# Method
-My plan was to work with a unsupervised prediction method produced by A. Villegas-Morcillo et. al in a papercalled 
+## Method
+My plan was to work with a unsupervised prediction method produced by A. Villegas-Morcillo et. al in a paper called 
 [Unsupervised protein embeddings outperform hand-crafted sequence and structure features at predicting molecular function](https://academic.oup.com/bioinformatics/article/37/2/162/5892762).
 I started by just doing web searches for deep learning methods for function prediction and stumbled across this paper. To ensure I was 
 working with reasonable work, and just to get an idea of the field of research available, I mapped out the research [knowledge graph](https://www.connectedpapers.com/main/017a3f8315005d91d90662e95721f39362ca2a7a/Unsupervised-protein-embeddings-outperform-handcrafted-sequence-and-structure-features-at-predicting-molecular-function/graph)
