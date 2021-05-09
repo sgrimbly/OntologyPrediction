@@ -17,13 +17,13 @@ of PyTorch, torch-scatter etc. I dealt with this by following the instructions u
 In short, I installed PyTorch version 1.8.0, and then manually installed torch packages with `pip` by specifying the version I 
 need:
 
-`
+```
 pip install torch-scatter -f https://pytorch-geometric.com/whl/torch-1.5.0.html
 pip install torch-sparse -f https://pytorch-geometric.com/whl/torch-1.5.0.html
 pip install torch-cluster -f https://pytorch-geometric.com/whl/torch-1.5.0.html
 pip install torch-spline-conv -f https://pytorch-geometric.com/whl/torch-1.5.0.html
 pip install torch-geometric
-`
+```
 
 # Protein Function Prediction 
 The task I am interested in is taking a [protein sequence](https://en.wikipedia.org/wiki/Protein_primary_structure) and mapping
