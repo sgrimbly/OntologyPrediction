@@ -1,3 +1,5 @@
+# Reference: https://github.com/stamakro/GCN-for-Structure-and-Function
+
 import pickle
 import numpy as np
 

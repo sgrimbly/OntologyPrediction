@@ -1,3 +1,5 @@
+# Reference: https://github.com/stamakro/GCN-for-Structure-and-Function
+
 import numpy as np
 from sklearn.utils import resample
 from sklearn.metrics import roc_auc_score, average_precision_score, precision_recall_fscore_support

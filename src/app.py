@@ -48,6 +48,7 @@ class App(DeepChainApp):
         self.embeddings_file = str(self._dataset.path) + '/embeddings.npy'
         self.labels_file = str(self._dataset.path) + '/labels.pkl' # Pickle (Rick) Dict of labels
 
+        # Training locally for testing
         # self.GO_file = "datasets/for_biodataset_subset/GOs.npy" # Gene Ontology file for classification
         # self.data_file = "datasets/for_biodataset_subset/function_prediction.csv"
         # self.embeddings_file = "datasets/for_biodataset_subset/embeddings.npy"
@@ -142,16 +143,6 @@ class Utils:
             y = torch.from_numpy(np.array(labels))
         )
 
-class CustomData(Data):
-    def __init__(self, x = None, mask = None, y = None, **kwargs) -> None:
-        super(CustomData, self).__init__()
-        self.x = x
-        self.mask = mask
-        self.y = y
-        
-        for key, item in kwargs.items():
-            self[key] = item
-
 class Perceptron(nn.Module):
     """Model used for predicting the (Molecular) Gene Ontology (GO).
     NOTE The input dimension is determined by the shape of the 
@@ -178,6 +169,15 @@ class Perceptron(nn.Module):
 
         return embedding, output
 
+class CustomData(Data):
+    def __init__(self, x = None, mask = None, y = None, **kwargs) -> None:
+        super(CustomData, self).__init__()
+        self.x = x
+        self.mask = mask
+        self.y = y
+        
+        for key, item in kwargs.items():
+            self[key] = item
 class MLPDataset(Dataset):
     def __init__(self, X, y):
         # Initialize data
