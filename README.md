@@ -7,7 +7,7 @@ compute embeddings for sequences. The default model included is a multi-layer pe
 classes for the PDB dataset. This model is well captured by the below diagram. Here we see an example input of 
 an arbitrary length protein sequence.
 
-![](/OntologyPrediction/src/Model.png)
+![](/src/Model.png)
 
 The paper this app is based on argues that sequence information with unsupervised embeddings is not aided by
 structural information of the protein. Regardless, I think it could be an interesting expansion to include
