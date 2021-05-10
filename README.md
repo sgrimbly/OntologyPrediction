@@ -107,7 +107,7 @@ MSc Applied Mathematics | University of Cape Town
 
 ## Tasks
 - transformers
-- unsupervised NLP
+- unsupervised
 - multi-task classification
 
 ## Embeddings

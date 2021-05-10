@@ -1,0 +1,6 @@
+{
+    "tasks": ["transformers", "unsupervised", "multi-task", "classification"],
+    "libraries": ["pytorch", "pandas", "sklearn", "biotransformers", "biodatasets", "deepchain"],
+    "embeddings": ["ESM", "protbert"],
+    "datasets": ["PDB", "ontologyprediction"]
+}
