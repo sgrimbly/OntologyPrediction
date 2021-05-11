@@ -2,12 +2,19 @@
 # Ontology Prediction 🧬 🎱
 This app is a base application that computes the predicted [Molecular Gene Ontology](http://geneontology.org/)
 given a protein sequence. It makes use of the `bio-transformers` with a` ESM prot_bert` model as backend to 
-compute embeddings for sequences. The default model included is a multi-layer perceptron (MLP) with input size of 
+compute embeddings for sequences. This work is based on the paper 
+[Unsupervised protein embeddings outperform hand-crafted sequence and structure features at predicting molecular function](https://academic.oup.com/bioinformatics/article/37/2/162/5892762).
+The data used for training comes from the source code of the paper. I rebundled a portion of this data and 
+have made it available in [DeepChain's](https://app.deepchain.bio) open source dataset library, [biodatasets](https://github.com/DeepChainBio/bio-datasets).
+Due to limitations of compute the model remains untrained on the full dataset and only a very limited number of
+embeddings are pre-computed. Hopefully this will change in the near future.
+
+The default model included is a multi-layer perceptron (MLP) with input size of 
 1024, a single hidden layer with 512 fully connected nodes, and an output dimension 256 - the number of GO
 classes for the PDB dataset. This model is well captured by the below diagram. Here we see an example input of 
 an arbitrary length protein sequence.
 
-![](Model.png)
+![](/src/Model.png)
 
 The paper this app is based on argues that sequence information with unsupervised embeddings is not aided by
 structural information of the protein. Regardless, I think it could be an interesting expansion to include
@@ -107,7 +114,7 @@ MSc Applied Mathematics | University of Cape Town
 
 ## Tasks
 - transformers
-- unsupervised NLP
+- unsupervised
 - multi-task classification
 
 ## Embeddings

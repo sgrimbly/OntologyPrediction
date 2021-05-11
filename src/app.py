@@ -35,6 +35,7 @@ Score = Dict[str, float]
 ScoreList = List[Score]
 
 def mlp_collate(self, batch) -> Data:
+    """Function for returning single elements (pairs of data) from batch during training."""
     # Get data, label and length (from a list of arrays)
     feats = [item[0] for item in batch]
     labels = [item[1] for item in batch]
@@ -59,6 +60,7 @@ def train(
     logs_dir, 
     evaluate_train = True, 
     save_step = 10):
+    """Main function for training the ontology prediction pipeline."""
 
     # Define logger
     logger = SummaryWriter(logs_dir)
@@ -162,6 +164,8 @@ def train(
     return avg_valid_loss, avg_valid_avgprec, avg_valid_rocauc, avg_valid_sdmin, avg_valid_fmax
 
 def evaluate(device, net, criterion, eval_loader, icvec, nth=10, evaluation=False):
+    """Evaluate performance of neural network (MLP) on the multi-label classification task."""
+
     # Eval each sample
     net.eval()
     avg_loss = 0.0
@@ -200,6 +204,7 @@ def evaluate(device, net, criterion, eval_loader, icvec, nth=10, evaluation=Fals
     return avg_loss, avg_avgprec, avg_rocauc, avg_sdmin, avg_fmax, y_true, y_pred_sigm
 
 def test(device, net, criterion, model_file, test_loader, icvec, save_file=None):
+    """Test performance of model on unseen data."""
     # Load pretrained model
     epoch_num = load_checkpoint(net, filename=model_file)
     
@@ -218,6 +223,7 @@ def test(device, net, criterion, model_file, test_loader, icvec, save_file=None)
     print("--- Average test max F-score:           %.4f" % avg_test_fmax)
 
 def load_checkpoint(net, optimizer=None, scheduler=None, filename='model_last.pth.tar'):
+    """Custom helper function for loading a checkpointed PyTorch model."""
     start_epoch = 0
     try:
         checkpoint = torch.load(filename)
@@ -234,6 +240,8 @@ def load_checkpoint(net, optimizer=None, scheduler=None, filename='model_last.pt
     return start_epoch
 
 def extract(device, net, model_file, names_file, loader, save_file=None):
+    """Extract embeddings associated with given model and protein data."""
+
     # Load pretrained model
     epoch_num = load_checkpoint(net, filename=model_file)
 
@@ -258,7 +266,9 @@ def extract(device, net, model_file, names_file, loader, save_file=None):
 
 def smin(Ytrue, Ypred, termIC, nrThresholds):
     '''
-    get the minimum normalized semantic distance
+    Get the minimum normalized semantic distance. This is not really utilised in current
+    version of code as we don't make use of structural information. I foresee possible
+    use cases in the future and leave this here as a helper function.
 
     INPUTS:
         Ytrue : Nproteins x Ngoterms, ground truth binary label ndarray (not compressed)
@@ -282,7 +292,7 @@ def smin(Ytrue, Ypred, termIC, nrThresholds):
 ''' helper functions follow '''
 def normalizedSemanticDistance(Ytrue, Ypred, termIC, avg=False, returnRuMi = False):
     '''
-    evaluate a set of protein predictions using normalized semantic distance
+    Evaluate a set of protein predictions using normalized semantic distance
     value of 0 means perfect predictions, larger values denote worse predictions,
 
     INPUTS:
@@ -388,6 +398,15 @@ def bootstrap(Ytrue, Ypred, ic, nrBootstraps=1000, nrThresholds=51, seed=1002003
     return {'auc': bootstraps_pauc, 'sd': bootstraps_psd, 'roc': bootstraps_troc, 'fmax': bootstraps_pfmax}
 
 class App(DeepChainApp):
+    """Main class containing logic IO and coordinating training and evaluation of model.
+    A user can provide an input protein sequence and compute the defined scores classifying
+    a protein sequence with some probable functions in the form of a Gene Ontology (GO) 
+    identifier. Raw output is a matrix representing scores for each of the possible GOs 
+    associated with the dataset the app/model has been trained on.
+    
+    Please refer to README.md or DESC.md for some more information on what this app does 
+    or for references to source material this app is based on."""
+
     def __init__(self, dataset: str = "ontologyprediction-test", device: str = "cuda:0") -> None:
         self._device = device
         self._dataset = load_dataset(dataset)
@@ -406,7 +425,7 @@ class App(DeepChainApp):
         self.embeddings_file = str(self._dataset.path) + '/embeddings.npy'
         self.labels_file = str(self._dataset.path) + '/labels.pkl' # Pickle (Rick) Dict of labels
 
-        # Training locally for testing
+        # Training locally for testing. App currently makes use of data available in biodatasets.
         # self.GO_file = "datasets/for_biodataset_subset/GOs.npy" # Gene Ontology file for classification
         # self.data_file = "datasets/for_biodataset_subset/function_prediction.csv"
         # self.embeddings_file = "datasets/for_biodataset_subset/embeddings.npy"
@@ -433,12 +452,7 @@ class App(DeepChainApp):
         #return ["Loss", "Precision", "ROC AUC", "Min Semantic Distance", "F-score", "True Y", "Sigma Y"]
 
     def compute_scores(self, sequences) -> ScoreList:
-        """Return a list of all proteins score. Required for DeepChain App.
-
-        Score must be a list of dict:
-                - element of list is protein score
-                - key of dict are score_names
-        """
+        """Return a list of all proteins score. Required for DeepChain App."""
         # Load checkpoint model and optimizer
         load_checkpoint(net = self._model)
         embeddings = self._transformer.compute_embeddings(sequences)["cls"]
@@ -451,6 +465,7 @@ class App(DeepChainApp):
         return score
 
     def train(self) -> None:
+        """Coordinates training and validation by collating and calling appropriate helper functions."""
         labels = np.reshape(self.labels, (len(self.labels),-1))
         seq = np.reshape(self.sequences, (len(self.sequences),-1))
         emb = np.reshape(self.embeddings, (len(self.embeddings),-1))
@@ -460,8 +475,19 @@ class App(DeepChainApp):
         X_test = (x1_test, x2_test)
 
         train_set = MLPDataset(X_train, y_train)
-        train_loader = DataLoader(train_set, batch_size=self.batch_size, shuffle=True, num_workers=1, collate_fn=mlp_collate)
-        train_loader_eval = DataLoader(train_set, batch_size=1, shuffle=False, collate_fn=mlp_collate)
+        train_loader = DataLoader(
+            train_set, 
+            batch_size = self.batch_size, 
+            shuffle = True, 
+            num_workers = 1, 
+            collate_fn = mlp_collate
+        )
+        train_loader_eval = DataLoader(
+            train_set, 
+            batch_size = 1, 
+            shuffle = False, 
+            collate_fn = mlp_collate
+        )
 
         valid_set = MLPDataset(X_test, y_test)
         valid_loader = DataLoader(valid_set, batch_size=1, shuffle=False, collate_fn=mlp_collate)
