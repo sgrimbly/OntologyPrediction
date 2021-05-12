@@ -6,7 +6,8 @@ compute embeddings for sequences. This work is based on the paper
 The data used for training comes from the source code of the paper. I rebundled a portion of this data and 
 have made it available in [DeepChain's](https://app.deepchain.bio) open source dataset library, [biodatasets](https://github.com/DeepChainBio/bio-datasets).
 Due to limitations of compute the model remains untrained on the full dataset and only a very limited number of
-embeddings are pre-computed. Hopefully this will change in the near future.
+embeddings are pre-computed. Hopefully this will change in the near future. A full blog post of how I built this app 
+is available [here](https://stjohngrimbly.com/protein-function/).
 
 The default model included is a multi-layer perceptron (MLP) with input size of 
 1024, a single hidden layer with 512 fully connected nodes, and an output dimension 256 - the number of GO
